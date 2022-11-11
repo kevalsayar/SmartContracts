@@ -1,0 +1,29 @@
+{
+  "name": "gvcontracts",
+  "version": "1.0.0",
+  "description": "escrow smart contracts",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/GlobalVox/gvsmartcontracts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/GlobalVox/gvsmartcontracts/issues"
+  },
+  "homepage": "https://bitbucket.org/GlobalVox/gvsmartcontracts#readme",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/truffle-upgrades": "^1.17.0",
+    "@truffle/hdwallet-provider": "^2.1.0",
+    "dotenv": "^16.0.3",
+    "truffle": "^5.6.1"
+  }
+}

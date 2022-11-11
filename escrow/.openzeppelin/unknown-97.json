@@ -1,0 +1,63 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x8097e8A91c30e1cf8F84e6509Aa72A16443c6C65",
+    "txHash": "0xec0ef029f69562d5205859d88f39665fa2795da41a30016a8af795a99c3480de"
+  },
+  "proxies": [
+    {
+      "address": "0x661E3CdceD23E752AA244A9DA038cB56A8798D68",
+      "txHash": "0xa7cd7f8ee4a88a5fb36675e830dd96e57961a96449df2bae2456e4d8f1fd8625",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "61538771ece09a73efaa49bef3199b0b48391dc62bef3ebc536d9dd6ca3af168": {
+      "address": "0xcb5aC0f7802bC3518115aD5545CD0014ce32a2FE",
+      "txHash": "0x2aba77b2f5b2337357124fdefe69244334785a5555ea9b31ff2f01c7d16d4529",
+      "layout": {
+        "solcVersion": "0.8.16",
+        "storage": [
+          {
+            "contract": "EscrowFactory",
+            "label": "factoryOwner",
+            "type": "t_address_payable",
+            "src": "..\\project:\\contracts\\factory.sol:8"
+          },
+          {
+            "contract": "EscrowFactory",
+            "label": "userInfo",
+            "type": "t_mapping(t_string_memory_ptr,t_mapping(t_string_memory_ptr,t_address))",
+            "src": "..\\project:\\contracts\\factory.sol:9"
+          },
+          {
+            "contract": "EscrowFactory",
+            "label": "beacon",
+            "type": "t_contract(EscrowBeacon)1786",
+            "src": "..\\project:\\contracts\\factory.sol:10"
+          }
+        ],
+        "types": {
+          "t_address_payable": {
+            "label": "address payable"
+          },
+          "t_mapping(t_string_memory_ptr,t_mapping(t_string_memory_ptr,t_address))": {
+            "label": "mapping(string => mapping(string => address))"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_mapping(t_string_memory_ptr,t_address)": {
+            "label": "mapping(string => address)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(EscrowBeacon)1786": {
+            "label": "contract EscrowBeacon"
+          }
+        }
+      }
+    }
+  }
+}

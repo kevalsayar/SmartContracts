@@ -105,7 +105,7 @@ contract Escrow{
     }
 
     modifier minimumTimePeriod(){
-        require(block.timestamp - depositTime > 3 minutes, "Funds can be withdrawn only after a period of 6 months!");
+        require(block.timestamp - depositTime > 26 weeks, "Funds can be withdrawn only after a period of 6 months!");
         _;
     }
 
@@ -125,30 +125,30 @@ contract Escrow{
         owner = _owner;
     }
 
-    function escrowParties(
-        // address payable _buyer, 
+    function escrowParties( 
         address payable _seller
     )
         public
         initByOwner
-        differentWalletAddresses(tx.origin, _seller)
         isAddressValid (tx.origin)
         isAddressValid (_seller)
+        differentWalletAddresses(tx.origin, _seller)
+        differentWalletAddresses(tx.origin, owner)
     {
         buyer = payable(tx.origin);
         seller = _seller;
     }
 
-    function deposit(address payable _buyer) 
+    function deposit() 
         public 
         payable 
         stateInit
         partiesDefined
-        buyerOnly(_buyer)
+        buyerOnly(tx.origin)
         minimumAmount 
     {
         currentState = State.FUNDED;
-        emit Funded(_buyer, msg.value, State.FUNDED);
+        emit Funded(tx.origin, msg.value, State.FUNDED);
         depositTime = block.timestamp;
     }
 
@@ -168,7 +168,6 @@ contract Escrow{
     {
         (uint256 amountAfterCommission, uint256 commissionAmount) = calculateAmountToTransfer();
         msg.sender == buyer ? seller.transfer(amountAfterCommission) : buyer.transfer(amountAfterCommission);
-        // commissionWallet.call
         commissionWallet.transfer(commissionAmount);
         currentState = State.RELEASED;
         emit ReleaseFund(
@@ -179,10 +178,10 @@ contract Escrow{
         );
     }
 
-    function withdrawFund(address payable _buyer) 
+    function withdrawFund() 
         public 
         stateFunded 
-        buyerOnly(_buyer)
+        buyerOnly(msg.sender)
     {
         (uint256 amountAfterCommission, uint256 commissionAmount) = calculateAmountToTransfer();
         buyer.transfer(amountAfterCommission);
@@ -209,15 +208,13 @@ contract Escrow{
 
     function postSixMonths()
         public
-        payable
-        // stateAccepted
         minimumTimePeriod
         ownerOnly
-        // isAddressValid(ownerAddress)
     {
-        owner.transfer(address(this).balance);
+        uint256 contractBalance = address(this).balance;
+        owner.transfer(contractBalance);
         currentState = State.WITHDRAWED_BY_OWNER;
-        emit SixMonths(owner, msg.value);
+        emit SixMonths(owner, contractBalance);
     }
 
     function currentStateOfDeal()
