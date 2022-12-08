@@ -12,10 +12,9 @@
  *
  */
 
-// require('dotenv').config();
-// const { MNEMONIC, PROJECT_ID } = process.env;
-
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+require("dotenv").config();
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const { MNEMONIC, JSON_RPC, bscAPIkey, polygonscanAPIkey } = process.env;
 
 module.exports = {
   /**
@@ -40,13 +39,9 @@ module.exports = {
       network_id: "*", // Any network (default: none)
     },
     bsct: {
-      provider: () =>
-        new HDWalletProvider(
-          mnemonic,
-          `https://data-seed-prebsc-1-s1.binance.org:8545`
-        ),
+      provider: () => new HDWalletProvider(MNEMONIC, JSON_RPC),
       network_id: 97,
-      confirmations: 10,
+      confirmations: 1,
       timeoutBlocks: 200,
       skipDryRun: true,
     },
@@ -77,6 +72,15 @@ module.exports = {
       //  evmVersion: "byzantium"
       // }
     },
+  },
+  // Plugins.
+  plugins: ["truffle-plugin-verify"],
+  // API keys obtained from respective network's explorers.
+  api_keys: {
+    // https://docs.bscscan.com/getting-started/viewing-api-usage-statistics
+    testnet_bscscan: bscAPIkey,
+    // https://polygonscan.com/login
+    polygonscan: polygonscanAPIkey,
   },
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:

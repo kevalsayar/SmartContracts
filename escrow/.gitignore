@@ -8,8 +8,8 @@ node_modules/
 dist/
 .openzeppelin/
 build/
-
 .env
+
 # Compiled Java class files
 *.class
 
