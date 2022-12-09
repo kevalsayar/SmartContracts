@@ -1,0 +1,29 @@
+{
+  "name": "nftcontract",
+  "version": "1.0.0",
+  "description": "Smart Contract for NFTs",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "compile": "npx truffle compile --all",
+    "migrate-bsct": "npx truffle migrate --network bsct",
+    "migrate-mumbai": "npx truffle migrate --network mumbai",
+    "migrate-polygon": "npx truffle migrate --network polygon",
+    "verify-bsct": "npx truffle run verify FractionalNFT --network bsct",
+    "verify-mumbai": "npx truffle run verify FractionalNFT --network mumbai",
+    "verify-polygon": "npx truffle run verify FractionalNFT --network polygon"
+  },
+  "author": "Keval Sayar",
+  "license": "ISC",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.8.0",
+    "@openzeppelin/contracts-upgradeable": "^4.8.0",
+    "@openzeppelin/truffle-upgrades": "^1.17.0",
+    "@truffle/hdwallet-provider": "^2.1.2",
+    "dotenv": "^16.0.3",
+    "truffle": "^5.6.8",
+    "truffle-plugin-verify": "^0.6.1"
+  }
+}
