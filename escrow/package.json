@@ -1,7 +1,7 @@
 {
-  "name": "gvcontracts",
+  "name": "escrow",
   "version": "1.0.0",
-  "description": "escrow smart contracts",
+  "description": "Escrow Smart Contracts",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
@@ -12,16 +12,8 @@
     "verify-EscrowFactory-bsct": "npx truffle run verify EscrowFactory --network bsct",
     "verify-Escrow-bsct": "npx truffle run verify Escrow --network bsct"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@bitbucket.org/GlobalVox/gvsmartcontracts.git"
-  },
-  "author": "",
+  "author": "Keval Sayar",
   "license": "ISC",
-  "bugs": {
-    "url": "https://bitbucket.org/GlobalVox/gvsmartcontracts/issues"
-  },
-  "homepage": "https://bitbucket.org/GlobalVox/gvsmartcontracts#readme",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.7.3",
     "@openzeppelin/truffle-upgrades": "^1.17.0",
