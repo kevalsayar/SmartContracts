@@ -43,6 +43,10 @@ Helpful, but optional:
 $ npm install
 ```
 
+#### **Prepping up the .env**
+
+Before you proceed any further, you'll need to set up an `.env file`. You'll need to take a peek at the `.env.example` file provided to be aware of whats got to be stored in the `.env` and we're then good to go.
+
 ### **Usage**
 
 - **Compile Contracts**
