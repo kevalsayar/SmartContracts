@@ -2,6 +2,7 @@
 pragma solidity ^0.8.2;
 
 import "./fNFTtoken.sol";
+import "./erc20Beacon.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
@@ -13,6 +14,8 @@ contract FractionalNFT is
     ERC721BurnableUpgradeable,
     OwnableUpgradeable
 {
+    ERC20Beacon beacon;
+
     // fNFT's Token Address.
     struct fractionalERC20Tokens {
         address erc20TokenAddress;
@@ -37,10 +40,13 @@ contract FractionalNFT is
     // Mapping Valuations Data against NFT's tokenId.
     mapping(uint256 => Valuations) private ValuationsData;
 
-    function initialize(string memory name, string memory symbol)
-        public
-        initializer
-    {
+    function initialize(
+        string memory name,
+        string memory symbol,
+        address _vLogic
+    ) public initializer {
+        beacon = new ERC20Beacon();
+        beacon.initializer(_vLogic);
         __ERC721_init(name, symbol);
         __ERC721Enumerable_init();
         __ERC721URIStorage_init();
@@ -102,21 +108,45 @@ contract FractionalNFT is
         uint256 _tokenId,
         address _to,
         string memory _tokenURI,
-        uint256 _totalFractionalTokens
+        uint256 _totalFractionalTokens,
+        string memory shareName,
+        string memory shareSymbol
     ) external onlyOwner {
         _safeMint(_to, _tokenId);
         _setTokenURI(_tokenId, _tokenURI);
 
+        // if (_totalFractionalTokens > 0) {
+        //     // Creating an ERC20 Token Contract for newly minted NFT.
+        //     FNFToken _fnftoken = (new FNFToken)();
+
+        //     _fnftoken.initialize("RuptokShare", "RKS");
+
+        //     // Minting fractional tokens and sending them to the NFT owner's account.
+        //     _fnftoken.mint(_to, _totalFractionalTokens * 1000000000000000000);
+
+        // fractionalERC20Tokens memory tokenAddress;
+        // tokenAddress.erc20TokenAddress = address(_fnftoken);
+
+        // // Bind the fractional token address to the newly minted NFT's tokenId.
+        // ERC20TokenAddress[_tokenId] = tokenAddress;
+        // }
         if (_totalFractionalTokens > 0) {
-            // Creating an ERC20 Token Contract for newly minted NFT.
-            FNFToken _fnftoken = (new FNFToken)();
+            BeaconProxy proxy = new BeaconProxy(
+                address(beacon),
+                abi.encodeWithSelector(
+                    FNFToken(address(0)).initialize.selector,
+                    shareName,
+                    shareSymbol
+                )
+            );
 
-            _fnftoken.initialize("RuptokShare", "RKS");
+            FNFToken(address(proxy)).mint(
+                _to,
+                _totalFractionalTokens * 1000000000000000000
+            );
 
-            // Minting fractional tokens and sending them to the NFT owner's account.
-            _fnftoken.mint(_to, _totalFractionalTokens * 1000000000000000000);
             fractionalERC20Tokens memory tokenAddress;
-            tokenAddress.erc20TokenAddress = address(_fnftoken);
+            tokenAddress.erc20TokenAddress = address(proxy);
 
             // Bind the fractional token address to the newly minted NFT's tokenId.
             ERC20TokenAddress[_tokenId] = tokenAddress;
@@ -141,6 +171,20 @@ contract FractionalNFT is
         returns (string memory)
     {
         return ValuationsData[_tokenId].valuationsData;
+    }
+
+    /**
+     * @dev Returns implementation address for a particular beacon.
+     */
+    function ERC20ImplAddress() public view returns (address) {
+        return beacon.implementation();
+    }
+
+    /**
+     * @dev Returns beacon address to which proxy address's point to.
+     */
+    function ERC20BeaconAddress() public view returns (address) {
+        return address(beacon);
     }
 
     // The following functions are overrides required by Solidity.
