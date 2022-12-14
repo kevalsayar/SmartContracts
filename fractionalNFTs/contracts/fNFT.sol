@@ -2,16 +2,12 @@
 pragma solidity ^0.8.2;
 
 import "./fNFTtoken.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 contract FractionalNFT is
-    Initializable,
-    ERC721Upgradeable,
     ERC721EnumerableUpgradeable,
     ERC721URIStorageUpgradeable,
     ERC721BurnableUpgradeable,
@@ -74,17 +70,32 @@ contract FractionalNFT is
         ValuationsData[_tokenId] = valuations;
     }
 
-    function transferFrom(
+    function transferNftAfterSale(
         address from,
         address to,
         uint256 tokenId
-    ) public override(ERC721Upgradeable) {
+    ) public {
         address tokenAddress = getTokenAddress(tokenId);
         require(
-            ERC20(tokenAddress).totalSupply() == 0,
-            "Existing Tokens for this NFT!"
+            ERC20Upgradeable(tokenAddress).balanceOf(to) ==
+                ERC20Upgradeable(tokenAddress).totalSupply(),
+            "To address doesn't hold all the tokens yet!"
         );
-        super.transferFrom(from, to, tokenId);
+        super.safeTransferFrom(from, to, tokenId);
+    }
+
+    function giftNFT(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public {
+        address tokenAddress = getTokenAddress(tokenId);
+        require(
+            ERC20Upgradeable(tokenAddress).balanceOf(from) ==
+                ERC20Upgradeable(tokenAddress).totalSupply(),
+            "You don't hold all the tokens!"
+        );
+        super.safeTransferFrom(from, to, tokenId);
     }
 
     function mintFNFT(
@@ -100,11 +111,10 @@ contract FractionalNFT is
             // Creating an ERC20 Token Contract for newly minted NFT.
             FNFToken _fnftoken = (new FNFToken)();
 
+            _fnftoken.initialize("RuptokShare", "RKS");
+
             // Minting fractional tokens and sending them to the NFT owner's account.
-            _fnftoken.mint(
-                msg.sender,
-                _totalFractionalTokens * 1000000000000000000
-            );
+            _fnftoken.mint(_to, _totalFractionalTokens * 1000000000000000000);
             fractionalERC20Tokens memory tokenAddress;
             tokenAddress.erc20TokenAddress = address(_fnftoken);
 

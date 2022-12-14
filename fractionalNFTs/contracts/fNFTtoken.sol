@@ -1,12 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract FNFToken is ERC20, ERC20Burnable, Ownable {
-    constructor() ERC20("DummyERC20", "DERC") {}
+contract FNFToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
+    function initialize(string memory name, string memory symbol)
+        public
+        initializer
+    {
+        __ERC20_init(name, symbol);
+        __Ownable_init();
+    }
 
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);

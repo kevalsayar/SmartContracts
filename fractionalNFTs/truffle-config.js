@@ -40,12 +40,13 @@ module.exports = {
       network_id: 80001, // Mumbai's network id.
       gasPrice: 30000000000,
       confirmations: 1, // Number of confirmations to wait between deployments. (default: 0)
-      // timeoutBlocks: 200, // Number of blocks before a deployment times out.  (minimum/default: 50)
+      timeoutBlocks: 200, // Number of blocks before a deployment times out.  (minimum/default: 50)
       skipDryRun: true,
     },
     polygon: {
       provider: () => new HDWalletProvider(MNEMONIC, JSON_RPC),
       network_id: 137, // Polygon's network id.
+      gasPrice: 30000000000,
       confirmations: 2, // Number of confirmations to wait between deployments. (default: 0)
       timeoutBlocks: 200, //Number of blocks before a deployment times out.  (minimum/default: 50)
       skipDryRun: true,

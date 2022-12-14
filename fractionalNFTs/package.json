@@ -1,22 +1,34 @@
 {
   "name": "nftcontract",
   "version": "1.0.0",
-  "description": "Smart Contract for NFTs",
+  "description": "Ruptok's Smart Contract for NFTs",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "compile": "npx truffle compile --all",
+    "dashboard": "npx truffle dashboard",
     "migrate-bsct": "npx truffle migrate --network bsct",
+    "migrate-dashboard": "npx truffle migrate --network dashboard",
     "migrate-mumbai": "npx truffle migrate --network mumbai",
     "migrate-polygon": "npx truffle migrate --network polygon",
     "verify-bsct": "npx truffle run verify FractionalNFT --network bsct",
-    "verify-mumbai": "npx truffle run verify FractionalNFT --network mumbai",
-    "verify-polygon": "npx truffle run verify FractionalNFT --network polygon"
+    "verify-fNFT-mumbai": "npx truffle run verify FractionalNFT --network mumbai",
+    "verify-fNFToken-mumbai": "npx truffle run verify FNFToken --network mumbai",
+    "verify-fNFT-polygon": "npx truffle run verify FractionalNFT --network polygon",
+    "verify-fNFToken-polygon": "npx truffle run verify FNFToken --network polygon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/ruptok-labs/fractional-nft.git"
   },
   "author": "Keval Sayar",
   "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/ruptok-labs/fractional-nft/issues"
+  },
+  "homepage": "https://bitbucket.org/ruptok-labs/fractional-nft#readme",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.8.0",
     "@openzeppelin/contracts-upgradeable": "^4.8.0",
