@@ -1,0 +1,27 @@
+{
+  "name": "guc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "compile": "npx truffle compile --all",
+    "dashboard": "npx truffle dashboard",
+    "migrate-dashboard": "npx truffle migrate --network dashboard",
+    "migrate-bsct": "npx truffle migrate --network bsct",
+    "verify-TokenVesting-bsct": "npx truffle run verify TokenVesting --network bsct"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.8.0",
+    "@openzeppelin/contracts-upgradeable": "^4.8.0",
+    "@openzeppelin/truffle-upgrades": "^1.17.0",
+    "@truffle/hdwallet-provider": "^2.1.2",
+    "dotenv": "^16.0.3",
+    "truffle": "^5.6.8",
+    "truffle-plugin-verify": "^0.6.1"
+  }
+}
