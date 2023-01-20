@@ -2,7 +2,6 @@
 pragma solidity ^0.8.2;
 
 import "./fNFTtoken.sol";
-import "./erc20Beacon.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
@@ -14,39 +13,46 @@ contract FractionalNFT is
     ERC721BurnableUpgradeable,
     OwnableUpgradeable
 {
-    ERC20Beacon beacon;
-
     // fNFT's Token Address.
     struct fractionalERC20Tokens {
         address erc20TokenAddress;
     }
 
-    // Jewellery Data.
+    // Grouping together the Jewellery Data.
     struct Jewellery {
-        string jewelleryData;
+        address nftTokenAddress;
+        string jewelleryMetal;
+        string purity;
+        string netWeight;
+        string grossWeight;
+        string stones;
+        string additional_data;
+        string ownerName;
     }
 
     // Valuations Data.
     struct Valuations {
-        string valuationsData;
+        address nftTokenAddress;
+        string valuationFirm;
+        string timestamp;
+        string valuationData;
+        bool updateJewellery;
     }
 
     // Mapping fractional token's addresses against NFT's tokenId.
-    mapping(uint256 => fractionalERC20Tokens) private ERC20TokenAddress;
+    mapping(uint256 => fractionalERC20Tokens)
+        private tokenIdToERC20TokenAddress;
 
     // Mapping Jewellery Data against NFT's tokenId.
-    mapping(uint256 => Jewellery) private JewelleryData;
+    mapping(uint256 => Jewellery) public tokenIdToJewelleryData;
 
     // Mapping Valuations Data against NFT's tokenId.
-    mapping(uint256 => Valuations) private ValuationsData;
+    mapping(uint256 => Valuations) public tokenIdToValuationsData;
 
-    function initialize(
-        string memory name,
-        string memory symbol,
-        address _vLogic
-    ) public initializer {
-        beacon = new ERC20Beacon();
-        beacon.initializer(_vLogic);
+    function initialize(string memory name, string memory symbol)
+        public
+        initializer
+    {
         __ERC721_init(name, symbol);
         __ERC721Enumerable_init();
         __ERC721URIStorage_init();
@@ -55,136 +61,141 @@ contract FractionalNFT is
     }
 
     // Set Jewellery Data against provided tokenId.
-    function setJewelleryData(uint256 _tokenId, string memory _jewelleryData)
-        public
-        onlyOwner
-    {
-        Jewellery memory jewellery;
-        jewellery.jewelleryData = _jewelleryData;
+    function setJewelleryData(
+        uint256 _tokenId,
+        string memory _jewelleryMetal,
+        string memory _netWeight,
+        string memory _grossWeight,
+        string memory _purity,
+        string memory _stones,
+        string memory _additionalData,
+        string memory _ownerName
+    ) public onlyOwner {
+        _requireMinted(_tokenId);
 
-        JewelleryData[_tokenId] = jewellery;
+        Jewellery memory jewellery;
+        jewellery.nftTokenAddress = getTokenAddress(_tokenId);
+        jewellery.stones = _stones;
+        jewellery.additional_data = _additionalData;
+        jewellery.jewelleryMetal = _jewelleryMetal;
+        jewellery.netWeight = _netWeight;
+        jewellery.grossWeight = _grossWeight;
+        jewellery.purity = _purity;
+        jewellery.ownerName = _ownerName;
+
+        tokenIdToJewelleryData[_tokenId] = jewellery;
     }
 
     // Set Valuation Data against provided tokenId.
-    function setValuationData(uint256 _tokenId, string memory _valuationsData)
-        public
-        onlyOwner
-    {
+    function setValuationData(
+        uint256 _tokenId,
+        string memory _valuationsData,
+        string memory _valuationFirm,
+        string memory _timestamp,
+        bool _updateJewellery
+    ) public onlyOwner {
+        _requireMinted(_tokenId);
+
         Valuations memory valuations;
-        valuations.valuationsData = _valuationsData;
+        valuations.valuationData = _valuationsData;
+        valuations.valuationFirm = _valuationFirm;
+        valuations.timestamp = _timestamp;
+        valuations.updateJewellery = _updateJewellery;
+        valuations.nftTokenAddress = getTokenAddress(_tokenId);
 
-        ValuationsData[_tokenId] = valuations;
+        tokenIdToValuationsData[_tokenId] = valuations;
     }
 
-    function transferNftAfterSale(
+    function transferNFT(
         address from,
         address to,
-        uint256 tokenId
+        uint256 tokenId,
+        string memory transferType,
+        string memory price
     ) public {
-        address tokenAddress = getTokenAddress(tokenId);
-        require(
-            ERC20Upgradeable(tokenAddress).balanceOf(to) ==
-                ERC20Upgradeable(tokenAddress).totalSupply(),
-            "To address doesn't hold all the tokens yet!"
-        );
         super.safeTransferFrom(from, to, tokenId);
     }
 
-    function giftNFT(
+    function transferAsset(
         address from,
         address to,
-        uint256 tokenId
+        uint256 tokenId,
+        string memory transferType,
+        string memory price
     ) public {
+        _requireMinted(tokenId);
+
         address tokenAddress = getTokenAddress(tokenId);
-        require(
-            ERC20Upgradeable(tokenAddress).balanceOf(from) ==
-                ERC20Upgradeable(tokenAddress).totalSupply(),
-            "You don't hold all the tokens!"
-        );
-        super.safeTransferFrom(from, to, tokenId);
+        if (tokenAddress != address(0x0)) {
+            // Transfer ERC-20 Tokens.
+            transferSharesOfFNFT(
+                tokenId,
+                to,
+                ERC20Upgradeable(tokenAddress).balanceOf(from)
+            );
+            super.safeTransferFrom(from, to, tokenId);
+        } else {
+            super.safeTransferFrom(from, to, tokenId);
+        }
     }
 
     function mintFNFT(
         uint256 _tokenId,
         address _to,
         string memory _tokenURI,
-        uint256 _totalFractionalTokens,
         string memory shareName,
-        string memory shareSymbol
+        string memory shareSymbol,
+        uint256 _totalFractionalTokens
     ) external onlyOwner {
         _safeMint(_to, _tokenId);
         _setTokenURI(_tokenId, _tokenURI);
 
-        // if (_totalFractionalTokens > 0) {
-        //     // Creating an ERC20 Token Contract for newly minted NFT.
-        //     FNFToken _fnftoken = (new FNFToken)();
-
-        //     _fnftoken.initialize("RuptokShare", "RKS");
-
-        //     // Minting fractional tokens and sending them to the NFT owner's account.
-        //     _fnftoken.mint(_to, _totalFractionalTokens * 1000000000000000000);
-
-        // fractionalERC20Tokens memory tokenAddress;
-        // tokenAddress.erc20TokenAddress = address(_fnftoken);
-
-        // // Bind the fractional token address to the newly minted NFT's tokenId.
-        // ERC20TokenAddress[_tokenId] = tokenAddress;
-        // }
         if (_totalFractionalTokens > 0) {
-            BeaconProxy proxy = new BeaconProxy(
-                address(beacon),
-                abi.encodeWithSelector(
-                    FNFToken(address(0)).initialize.selector,
-                    shareName,
-                    shareSymbol
-                )
-            );
+            // Creating an ERC20 Token Contract for newly minted NFT.
+            FNFToken _fnftoken = (new FNFToken)();
 
-            FNFToken(address(proxy)).mint(
-                _to,
-                _totalFractionalTokens * 1000000000000000000
-            );
+            _fnftoken.initialize(shareName, shareSymbol);
+
+            // Minting fractional tokens and sending them to the NFT owner's account.
+            _fnftoken.mint(_to, _totalFractionalTokens * 1000000000000000000);
 
             fractionalERC20Tokens memory tokenAddress;
-            tokenAddress.erc20TokenAddress = address(proxy);
+            tokenAddress.erc20TokenAddress = address(_fnftoken);
 
             // Bind the fractional token address to the newly minted NFT's tokenId.
-            ERC20TokenAddress[_tokenId] = tokenAddress;
+            tokenIdToERC20TokenAddress[_tokenId] = tokenAddress;
         }
     }
 
+    function transferSharesOfFNFT(
+        uint256 tokenId,
+        address to,
+        uint256 amount
+    ) public {
+        _requireMinted(tokenId);
+
+        address tokenAddress = getTokenAddress(tokenId);
+
+        // Transfer ERC-20 Tokens.
+        FNFToken _fnftoken = FNFToken(tokenAddress);
+        _fnftoken.transfer(msg.sender, to, amount);
+    }
+
     function getTokenAddress(uint256 _tokenId) public view returns (address) {
-        return ERC20TokenAddress[_tokenId].erc20TokenAddress;
+        return tokenIdToERC20TokenAddress[_tokenId].erc20TokenAddress;
     }
 
-    function getJewelleryData(uint256 _tokenId)
+    function userShareBalance(uint256 _tokenId, address account)
         public
         view
-        returns (string memory)
+        returns (uint256)
     {
-        return JewelleryData[_tokenId].jewelleryData;
-    }
+        _requireMinted(_tokenId);
 
-    function getValuationsData(uint256 _tokenId)
-        public
-        view
-        returns (string memory)
-    {
-        return ValuationsData[_tokenId].valuationsData;
-    }
+        address tokenAddress = getTokenAddress(_tokenId);
 
-    /**
-     * @dev Returns implementation address for a particular beacon.
-     */
-    function ERC20ImplAddress() public view returns (address) {
-        return beacon.implementation();
-    }
-
-    /**
-     * @dev Returns beacon address to which proxy address's point to.
-     */
-    function ERC20BeaconAddress() public view returns (address) {
-        return address(beacon);
+        FNFToken _fnftoken = FNFToken(tokenAddress);
+        return _fnftoken.balanceOf(account);
     }
 
     // The following functions are overrides required by Solidity.

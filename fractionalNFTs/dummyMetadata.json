@@ -9,8 +9,8 @@
             "value": "Ring"
         },
         {
-            "trait_type": "Jewel Make",
-            "value": "Gold"
+            "trait_type": "Asset Token",
+            "value": "someExample"
         }
     ],
     "description": "Ruptok's collection of Elite Men Diamond Rings.",

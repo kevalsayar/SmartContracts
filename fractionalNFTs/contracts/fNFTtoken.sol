@@ -17,4 +17,13 @@ contract FNFToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }
+
+    function transfer(
+        address from,
+        address to,
+        uint256 amount
+    ) public returns (bool) {
+        _transfer(from, to, amount);
+        return true;
+    }
 }
