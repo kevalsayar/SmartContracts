@@ -1,85 +1,34 @@
-# **SmartContracts**
-
-You'll find all kinds of smart contracts down here! Pop off!
-
-- [Requirements](#requirements)
-- [Setup](#setup)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Documentation](#documentation)
-
----
-
-<img src="https://trufflesuite.com/img/truffle-logo-dark.svg" width="200">
+# Smart Contracts
 
 [![npm](https://img.shields.io/npm/v/truffle.svg)](https://www.npmjs.com/package/truffle)
+[![Truffle](https://img.shields.io/badge/Truffle-%5E5.0.0-brightgreen.svg)](https://www.trufflesuite.com/truffle)
+[![Ganache](https://img.shields.io/badge/Ganache-Latest-brightgreen.svg)](https://github.com/trufflesuite/ganache)
+[![MetaMask](https://img.shields.io/badge/MetaMask-Latest-brightgreen.svg)](https://metamask.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-%5E14.0.0-brightgreen.svg)](https://nodejs.org/)
 
-This repo contains of smart contracts brought to life using **Truffle**, which is a development environment, testing framework, and asset pipeline for Ethereum, aiming to make life as an Ethereum developer easier.
+## **Overview**
+
+This repo contains of smart contracts, each serving a specific purpose in the blockchain ecosystem, brought to life using **Truffle**, which is a development environment, testing framework, and asset pipeline for Ethereum, aiming to make life as an Ethereum developer easier.
 
 Note that these are made upgradeable with the help of **OpenZeppelin's Upgrades** library which mainly helps in deploying upgradeable contracts with automated security checks.
 
----
+*Many more contracts are planned to be included soon!*
 
-## **Requirements**
+## **Contracts**
 
-These contracts have the following requirements:
+1. [BEP-20 Token](./contracts/escrow.sol): The BEP-20 token contract implements the standard token interface for the Binance Smart Chain. It includes features such as transfer, approval, and burning.
 
-- [Node.js](https://nodejs.org/) v12 or higher
-- [Truffle](https://trufflesuite.com/docs/truffle/getting-started/installation)
-- [Ganache](https://github.com/trufflesuite/ganache#getting-started)
+2. [BEP-20 Token Vesting](./contracts/tokenEscrow.sol): This contract facilitates the vesting of BEP-20 tokens over a specified period. It ensures that tokens are released gradually according to a predefined schedule.
 
-Helpful, but optional:
+3. [Escrow](./contracts/otherContract1.sol): The escrow contract acts as a trusted intermediary, holding funds until specific conditions are met. It provides a secure way to handle transactions between parties.
 
-- An [Infura](https://infura.io/) account and Project ID
-- A [MetaMask](https://metamask.io/) account
+4. [Fractional NFTs](./contracts/otherContract2.sol): The fractional NFT contract allows the creation and management of fractional ownership of non-fungible tokens (NFTs). Users can buy and sell fractions of NFTs, enabling shared ownership.
 
-## **Setup**
+## **Getting Started**
 
----
+To understand each smart contract and its functionalities, refer to their individual README files in their individual directories:
 
-### **Installation**
-
-```bash
-$ npm install
-```
-
-#### **Prepping up the .env**
-
-Before you proceed any further, you'll need to set up an `.env file`. You'll need to take a peek at the `.env.example` file provided to be aware of whats got to be stored in the `.env` and we're then good to go.
-
-### **Usage**
-
-- **Compile Contracts**
-
-```
-$ truffle compile --all
-```
-
-- **Migrate Contracts**
-
-```
-$ truffle migrate --network <Network Name>
-```
-
-- **Verify & Publish Contracts**
-
-```
-$ truffle run verify <Contract Name> --network <Network Name>
-```
-
-For a default set of contracts and tests, run the following within an empty project directory:
-
-```
-$ truffle init
-```
-
-From there, you can run `truffle compile`, `truffle migrate` and `truffle test`, `truffle run verify` to compile your contracts, deploy those contracts to the network, run their associated unit tests and verify them.
-
-Truffle comes bundled with a local development blockchain server that launches automatically when you invoke the commands above. If you'd like to [configure a more advanced development environment](https://trufflesuite.com/docs/truffle/reference/configuration) we recommend you install the blockchain server separately by running `npm install -g ganache` at the command line.
-
-- [ganache](https://github.com/trufflesuite/ganache): a command-line version of Truffle's blockchain server.
-- [ganache-ui](https://github.com/trufflesuite/ganache-ui): A GUI for the server that displays your transaction history and chain state.
-
-### **Documentation**
-
-Please see the [Official Truffle Documentation](https://trufflesuite.com/docs/) for guides, tips, and examples.
+- [BEP-20 Token](./BEP-20Token/README.md)
+- [BEP-20 Token Vesting](./BEP-20TokenVesting/README.md)
+- [Escrow](./escrow/README.md)
+- [Fractional NFTs](./fractionalNFTs/README.md)

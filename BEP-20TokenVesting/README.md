@@ -1,19 +1,19 @@
-# Escrow Smart Contract
+# BEP-20 Token Vesting Smart Contract
 
 ## Overview
 
-This directory contains the source code and documentation for the Escrow smart contract as part of the Escrow2.0 project. The Escrow contract facilitates secure and transparent transactions between buyers and sellers by holding funds in escrow until predetermined conditions are met.
+This directory contains the source code and documentation for the BEP-20 Token Vesting smart contract. The BEP-20 Token Vesting contract is designed to facilitate the gradual release of BEP-20 tokens over a specified vesting period, providing a mechanism for controlled token distribution.
 
-## Escrow Contract Features
+## Vesting Contract Features
 
-- **Supported Networks:** Binance Smart Chain (BSC)
-- **Smart Contract Type:** Escrow
-- **Multisignature Wallet:** Enabled
-- **Conditional Release:** Customizable
+- **Name:** Your Vesting Contract Name
+- **Vesting Period:** X months/years
+- **Cliff Period:** Y months/years
+- **Token Release Schedule:** Customizable
 
 ## Smart Contract Details
 
-- **Contract Name:** Escrow.sol
+- **Contract Name:** BEP20TokenVesting.sol
 - **Network:** Binance Smart Chain (BSC)
 - **Version:** 1.0.0
 
@@ -40,7 +40,6 @@ Ensure you have the following tools installed:
 - [Truffle](https://www.trufflesuite.com/truffle) for contract deployment and testing.
 
 Helpful, but optional:
-
 - [Ganache](https://github.com/trufflesuite/ganache#getting-started) for local blockchain development.
 - [Infura](https://infura.io/) account and Project ID.
 - [MetaMask](https://metamask.io/) account.
@@ -68,7 +67,7 @@ git clone git@github.com:kevalsayar/SmartContracts.git
 ### Navigate to the project directory
 
 ```bash
-cd SmartContracts/escrow
+cd SmartContracts/BEP-20TokenVesting
 ```
 
 ### Install dependencies
@@ -93,7 +92,7 @@ Create a new file named .env in the root of the project. Copy the variable names
   ```
 - #### **Migrate Contracts**
 
-  Deploy the escrow smart contract to the Binance Smart Chain:
+  Deploy the BEP-20 token vesting smart contract to the Binance Smart Chain:
 
   ```bash
   $ truffle migrate --network <Network Name>
@@ -107,13 +106,13 @@ Create a new file named .env in the root of the project. Copy the variable names
 
 ## **3. Testing**
 
-Run tests to ensure the escrow contract behaves as expected:
+Run tests to ensure the BEP-20 token vesting contract behaves as expected:
 
 ```
 $ truffle test
 ```
 
-The test suite includes comprehensive tests to validate the functionality and behavior of the escrow smart contract. Ensure all tests pass before deploying the contract in a production environment.
+The test suite includes comprehensive tests to validate the functionality and behavior of the BEP-20 token vesting smart contract. Ensure all tests pass before deploying the contract in a production environment.
 
 ## **4. Examples**
 

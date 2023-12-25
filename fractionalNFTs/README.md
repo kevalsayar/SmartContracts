@@ -1,20 +1,20 @@
-# Escrow Smart Contract
+# Fractional NFTs Smart Contract
 
 ## Overview
 
-This directory contains the source code and documentation for the Escrow smart contract as part of the Escrow2.0 project. The Escrow contract facilitates secure and transparent transactions between buyers and sellers by holding funds in escrow until predetermined conditions are met.
+This directory contains the source code and documentation for the Fractional NFTs smart contract. The Fractional NFTs contract enables the fractionalization of Non-Fungible Tokens, allowing users to own and trade fractions of high-value NFTs.
 
-## Escrow Contract Features
+## Fractional NFTs Contract Features
 
 - **Supported Networks:** Binance Smart Chain (BSC)
-- **Smart Contract Type:** Escrow
-- **Multisignature Wallet:** Enabled
-- **Conditional Release:** Customizable
+- **Fractionalization:** Enable users to own fractions of NFTs
+- **Governance:** Governance token for decision-making
+- **Liquidity Pool:** Facilitate trading of fractionalized NFTs
 
 ## Smart Contract Details
 
-- **Contract Name:** Escrow.sol
-- **Network:** Binance Smart Chain (BSC)
+- **Contract Name:** fNFT.sol
+- **Network:** Mumbai Testnet (Polygon)
 - **Version:** 1.0.0
 
 ## Table of Contents
@@ -30,7 +30,7 @@ This directory contains the source code and documentation for the Escrow smart c
 
 ## **1. Getting Started**
 
-To deploy and interact with the BEP-20 token smart contract, follow the steps below:
+To deploy and interact with the fractionalNFTs smart contract, follow the steps below:
 
 ## **Prerequisites**
 
@@ -68,7 +68,7 @@ git clone git@github.com:kevalsayar/SmartContracts.git
 ### Navigate to the project directory
 
 ```bash
-cd SmartContracts/escrow
+cd SmartContracts/fractionalNFTs
 ```
 
 ### Install dependencies
@@ -93,7 +93,7 @@ Create a new file named .env in the root of the project. Copy the variable names
   ```
 - #### **Migrate Contracts**
 
-  Deploy the escrow smart contract to the Binance Smart Chain:
+  Deploy the fractionalNFTs smart contract to the Binance Smart Chain:
 
   ```bash
   $ truffle migrate --network <Network Name>
@@ -107,13 +107,13 @@ Create a new file named .env in the root of the project. Copy the variable names
 
 ## **3. Testing**
 
-Run tests to ensure the escrow contract behaves as expected:
+Run tests to ensure the fractionalNFTs contract behaves as expected:
 
 ```
 $ truffle test
 ```
 
-The test suite includes comprehensive tests to validate the functionality and behavior of the escrow smart contract. Ensure all tests pass before deploying the contract in a production environment.
+The test suite includes comprehensive tests to validate the functionality and behavior of the fractionalNFTs smart contract. Ensure all tests pass before deploying the contract in a production environment.
 
 ## **4. Examples**
 
