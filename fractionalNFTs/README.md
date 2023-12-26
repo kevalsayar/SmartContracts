@@ -6,7 +6,7 @@ This directory contains the source code and documentation for the Fractional NFT
 
 ## Fractional NFTs Contract Features
 
-- **Supported Networks:** Binance Smart Chain (BSC)
+- **Supported Networks:** Mumbai Testnet (Polygon)
 - **Fractionalization:** Enable users to own fractions of NFTs
 - **Governance:** Governance token for decision-making
 - **Liquidity Pool:** Facilitate trading of fractionalized NFTs
