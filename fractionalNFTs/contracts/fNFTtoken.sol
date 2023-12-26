@@ -6,11 +6,11 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 contract FNFToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
-    function initialize(string memory name, string memory symbol)
-        public
-        initializer
-    {
-        __ERC20_init(name, symbol);
+    function initialize(
+        string memory tokenName,
+        string memory tokenSymbol
+    ) public initializer {
+        __ERC20_init(tokenName, tokenSymbol);
         __Ownable_init();
     }
 
@@ -23,6 +23,7 @@ contract FNFToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
         address to,
         uint256 amount
     ) public returns (bool) {
+        require(amount > 0, "Transfer amount must be greater than zero");
         _transfer(from, to, amount);
         return true;
     }

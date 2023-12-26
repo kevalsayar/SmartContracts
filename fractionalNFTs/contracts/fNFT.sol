@@ -49,10 +49,10 @@ contract FractionalNFT is
     // Mapping Valuations Data against NFT's tokenId.
     mapping(uint256 => Valuations) public tokenIdToValuationsData;
 
-    function initialize(string memory name, string memory symbol)
-        public
-        initializer
-    {
+    function initialize(
+        string memory name,
+        string memory symbol
+    ) public initializer {
         __ERC721_init(name, symbol);
         __ERC721Enumerable_init();
         __ERC721URIStorage_init();
@@ -106,58 +106,54 @@ contract FractionalNFT is
         tokenIdToValuationsData[_tokenId] = valuations;
     }
 
-    function transferNFT(
+    function transferFractNFT(
         address from,
         address to,
-        uint256 tokenId,
-        string memory transferType,
-        string memory price
-    ) public {
+        uint256 tokenId
+    ) internal {
         super.safeTransferFrom(from, to, tokenId);
     }
 
     function transferAsset(
         address from,
         address to,
-        uint256 tokenId,
-        string memory transferType,
-        string memory price
+        uint256 fNftTokenId
     ) public {
-        _requireMinted(tokenId);
+        _requireMinted(fNftTokenId);
 
-        address tokenAddress = getTokenAddress(tokenId);
+        address tokenAddress = getTokenAddress(fNftTokenId);
+
         if (tokenAddress != address(0x0)) {
             // Transfer ERC-20 Tokens.
-            transferSharesOfFNFT(
-                tokenId,
+            transferSharesOfFracNft(
+                tokenAddress,
                 to,
                 ERC20Upgradeable(tokenAddress).balanceOf(from)
             );
-            super.safeTransferFrom(from, to, tokenId);
-        } else {
-            super.safeTransferFrom(from, to, tokenId);
         }
+
+        transferFractNFT(from, to, fNftTokenId);
     }
 
-    function mintFNFT(
+    function mintFracNFT(
         uint256 _tokenId,
         address _to,
         string memory _tokenURI,
         string memory shareName,
         string memory shareSymbol,
-        uint256 _totalFractionalTokens
+        uint256 numOfFractionalTokens
     ) external onlyOwner {
         _safeMint(_to, _tokenId);
         _setTokenURI(_tokenId, _tokenURI);
 
-        if (_totalFractionalTokens > 0) {
+        if (numOfFractionalTokens > 0) {
             // Creating an ERC20 Token Contract for newly minted NFT.
             FNFToken _fnftoken = (new FNFToken)();
 
             _fnftoken.initialize(shareName, shareSymbol);
 
             // Minting fractional tokens and sending them to the NFT owner's account.
-            _fnftoken.mint(_to, _totalFractionalTokens * 1000000000000000000);
+            _fnftoken.mint(_to, numOfFractionalTokens * (10 ** 18));
 
             fractionalERC20Tokens memory tokenAddress;
             tokenAddress.erc20TokenAddress = address(_fnftoken);
@@ -167,14 +163,12 @@ contract FractionalNFT is
         }
     }
 
-    function transferSharesOfFNFT(
-        uint256 tokenId,
+    function transferSharesOfFracNft(
+        address tokenAddress,
         address to,
         uint256 amount
-    ) public {
-        _requireMinted(tokenId);
-
-        address tokenAddress = getTokenAddress(tokenId);
+    ) internal {
+        require(amount > 0, "Transfer amount must be greater than zero");
 
         // Transfer ERC-20 Tokens.
         FNFToken _fnftoken = FNFToken(tokenAddress);
@@ -185,17 +179,14 @@ contract FractionalNFT is
         return tokenIdToERC20TokenAddress[_tokenId].erc20TokenAddress;
     }
 
-    function userShareBalance(uint256 _tokenId, address account)
-        public
-        view
-        returns (uint256)
-    {
+    function userShareBalance(
+        uint256 _tokenId,
+        address userAddress
+    ) public view returns (uint256) {
         _requireMinted(_tokenId);
 
-        address tokenAddress = getTokenAddress(_tokenId);
-
-        FNFToken _fnftoken = FNFToken(tokenAddress);
-        return _fnftoken.balanceOf(account);
+        FNFToken _fnftoken = FNFToken(getTokenAddress(_tokenId));
+        return _fnftoken.balanceOf(userAddress);
     }
 
     // The following functions are overrides required by Solidity.
@@ -208,14 +199,15 @@ contract FractionalNFT is
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
-    function _burn(uint256 tokenId)
-        internal
-        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
-    {
+    function _burn(
+        uint256 tokenId
+    ) internal override(ERC721Upgradeable, ERC721URIStorageUpgradeable) {
         super._burn(tokenId);
     }
 
-    function tokenURI(uint256 tokenId)
+    function tokenURI(
+        uint256 tokenId
+    )
         public
         view
         override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
@@ -224,7 +216,9 @@ contract FractionalNFT is
         return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId)
+    function supportsInterface(
+        bytes4 interfaceId
+    )
         public
         view
         override(ERC721Upgradeable, ERC721EnumerableUpgradeable)

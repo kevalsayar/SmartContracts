@@ -1,4 +1,4 @@
-// Deploy FractionalNFT & FNFToken Smart Contract
+// Deploy FractionalNFT & FNFToken Smart Contract.
 
 require("dotenv").config();
 const { deployProxy, upgradeProxy } = require("@openzeppelin/truffle-upgrades");
