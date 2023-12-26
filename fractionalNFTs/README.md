@@ -24,11 +24,10 @@ This directory contains the source code and documentation for the Fractional NFT
    - [Installation](#installation)
 2. [Usage](#usage)
    - [Deploying Contracts](#deploying-contracts)
-   - [Interacting with Contracts](#interacting-with-contracts)
 3. [Testing](#testing)
 4. [Examples](#examples)
 
-## **1. Getting Started**
+## **Getting Started**
 
 To deploy and interact with the fractionalNFTs smart contract, follow the steps below:
 
@@ -83,7 +82,7 @@ $ npm install
 
 Create a new file named .env in the root of the project. Copy the variable names from the example.env file and populate their values in the .env file.
 
-## **2. Usage**
+## **Usage**
 
 ### **Deploying Contracts**
 
@@ -105,7 +104,7 @@ Create a new file named .env in the root of the project. Copy the variable names
   $ truffle run verify <Contract Name> --network <Network Name>
   ```
 
-## **3. Testing**
+## **Testing**
 
 Run tests to ensure the fractionalNFTs contract behaves as expected:
 
@@ -115,6 +114,6 @@ $ truffle test
 
 The test suite includes comprehensive tests to validate the functionality and behavior of the fractionalNFTs smart contract. Ensure all tests pass before deploying the contract in a production environment.
 
-## **4. Examples**
+## **Examples**
 
 Please see the [Official Truffle Documentation](https://trufflesuite.com/docs/) for guides, tips, and examples
