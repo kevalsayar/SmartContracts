@@ -1,4 +1,4 @@
-# Smart Contracts
+# Solidity Smart Contracts
 
 [![npm](https://img.shields.io/npm/v/truffle.svg)](https://www.npmjs.com/package/truffle)
 [![Truffle](https://img.shields.io/badge/Truffle-%5E5.0.0-brightgreen.svg)](https://www.trufflesuite.com/truffle)
@@ -8,7 +8,7 @@
 
 ## **Overview**
 
-This repo contains of smart contracts, each serving a specific purpose in the blockchain ecosystem, brought to life using **Truffle**, which is a development environment, testing framework, and asset pipeline for Ethereum, aiming to make life as an Ethereum developer easier.
+This directory contains of smart contracts, each serving a specific purpose in the blockchain ecosystem, brought to life using **Truffle**, which is a development environment, testing framework, and asset pipeline for Ethereum, aiming to make life as an Ethereum developer easier.
 
 Note that these are made upgradeable with the help of **OpenZeppelin's Upgrades** library which mainly helps in deploying upgradeable contracts with automated security checks.
 
@@ -32,5 +32,6 @@ To understand each smart contract and its functionalities, refer to their indivi
 
 - [BEP-20 Token](./BEP-20Token/README.md)
 - [BEP-20 Token Vesting](./BEP-20TokenVesting/README.md)
+- [Blind Aucion](./blindAuction/README.md)
 - [Escrow](./escrow/README.md)
 - [Fractional NFTs](./fractionalNFTs/README.md)
